@@ -7,14 +7,6 @@ import lombok.*;
 
 import java.time.LocalDateTime;
 
-//david a modificat
-///cebahsdkjsdaksndikjhasbdkjansdkjsad
-
-///asd bajvd
-/// kjabsdiuhbasdkjhsad
-/// askhndbvuiahsdb
-/// akshjdbihajsdb
-///
 
 @Data
 @NoArgsConstructor
