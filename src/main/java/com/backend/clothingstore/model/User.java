@@ -4,7 +4,6 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;
-
 import java.time.LocalDateTime;
 
 
@@ -25,6 +24,7 @@ public class User {
   @NotBlank(message = "Name is required")
   private String username;
 
+
   private String firstName;
   private String lastName;
 
@@ -44,6 +44,7 @@ public class User {
   @Column(nullable = false)
   private Role role;
 
+
   private String phone;
   private String address;
   private String city;
@@ -52,8 +53,8 @@ public class User {
   private String country;
 
 
-  private Boolean isVerified;
 
+  private Boolean isVerified;
   private String verificationToken;
 
   private LocalDateTime createdAt;
