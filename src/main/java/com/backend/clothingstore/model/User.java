@@ -6,4 +6,6 @@ public class User {
     //ma cac pe el proiect
     //o sa fie confict
     private int ideeeeeee;
+    private int id;
+    private String username;
 }
