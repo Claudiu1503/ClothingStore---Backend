@@ -11,6 +11,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Base64;
+import java.util.Collections;
 
 @RestController
 @RequestMapping("/user")
@@ -40,12 +41,14 @@ public class AuthenticationController {
         String password = loginRequestDTO.getPassword();
 
         try {
-            String user = userService.login(email, password);
-            return ResponseEntity.ok(user);
+            String message = userService.login(email, password);
+            // Returnam un obiect JSON cu un mesaj
+            return ResponseEntity.ok(Collections.singletonMap("message", message));
         } catch (IllegalArgumentException e) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Collections.singletonMap("error", e.getMessage()));
         }
     }
+
 
 
 

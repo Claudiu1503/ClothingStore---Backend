@@ -47,7 +47,7 @@ public class SecurityConfig {
                                 .requestMatchers("/user-confirmation").permitAll()
                                 .requestMatchers("/api/reset-password").permitAll()
                                 .requestMatchers("/reset/**").permitAll()
-                                .requestMatchers("/api/register", "/api/login").permitAll() // Allow these endpoints without authentication
+                                .requestMatchers("/user/register", "/user/login").permitAll() // Allow these endpoints without authentication
                                 .requestMatchers("/admin/**").hasRole("ADMIN")
 //                        .anyRequest().authenticated()
                                 .anyRequest().permitAll()
@@ -86,13 +86,14 @@ public class SecurityConfig {
     @Bean
     CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-//        configuration.setAllowedOrigins(Arrays.asList("https://example.com"));
         configuration.setAllowedOrigins(Arrays.asList("http://localhost:5173")); // URL-ul frontend-ului
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
-        configuration.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type"));
+        configuration.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type", "X-Requested-With"));
+        configuration.setAllowCredentials(true); // Permite credențialele (cookies, headers, etc.)
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
         return source;
     }
+
 
 }
