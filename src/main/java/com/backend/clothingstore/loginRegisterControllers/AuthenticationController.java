@@ -1,6 +1,7 @@
 package com.backend.clothingstore.loginRegisterControllers;
 
 import com.backend.clothingstore.DTO.LoginRequestDTO;
+import com.backend.clothingstore.errorHeandler.ConcreteErrorResponse;
 import com.backend.clothingstore.model.User;
 import com.backend.clothingstore.services.UserService;
 import lombok.AllArgsConstructor;
@@ -8,10 +9,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.ErrorResponse;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Base64;
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/user")
@@ -35,19 +39,38 @@ public class AuthenticationController {
         }
     }
 
+//    @PostMapping("/login")
+//    public ResponseEntity<?> login(@RequestBody LoginRequestDTO loginRequestDTO) {
+//        String email = loginRequestDTO.getEmail();
+//        String password = loginRequestDTO.getPassword();
+//
+//        try {
+//            String message = userService.login(email, password);
+//            // Returnam un obiect JSON cu un mesaj
+//            return ResponseEntity.ok(Collections.singletonMap("message", message));
+//        } catch (IllegalArgumentException e) {
+//            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Collections.singletonMap("error", e.getMessage()));
+//        }
+//    }
+
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginRequestDTO loginRequestDTO) {
-        String email = loginRequestDTO.getEmail();
-        String password = loginRequestDTO.getPassword();
+        User user = userService.authenticate(loginRequestDTO.getEmail(), loginRequestDTO.getPassword());
 
-        try {
-            String message = userService.login(email, password);
-            // Returnam un obiect JSON cu un mesaj
-            return ResponseEntity.ok(Collections.singletonMap("message", message));
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Collections.singletonMap("error", e.getMessage()));
+        if (user != null) {
+            Map<String, String> response = new HashMap<>();
+            response.put("message", "Login successful");
+            response.put("username", user.getUsername());
+
+            return ResponseEntity.ok(response);
+        } else {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body(new ConcreteErrorResponse("Invalid email or password"));
+
         }
     }
+
+
 
 
 
