@@ -5,4 +5,6 @@ public class User {
     //private string ma-ta*
     //ma cac pe el proiect
     //o sa fie confict
+    private int id;
+    private String username;
 }
