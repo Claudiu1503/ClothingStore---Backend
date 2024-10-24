@@ -57,8 +57,36 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User updateUser(User user) {
-        return userRepository.save(user);
+        User existingUser = userRepository.findById(user.getId())
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        // Update only non-null fields
+        if (user.getUsername() != null) existingUser.setUsername(user.getUsername());
+        if (user.getFirstName() != null) existingUser.setFirstName(user.getFirstName());
+        if (user.getLastName() != null) existingUser.setLastName(user.getLastName());
+        if (user.getEmail() != null) existingUser.setEmail(user.getEmail());
+        if (user.getPassword() != null) {
+
+            existingUser.setPassword(passwordEncoder.encode(user.getPassword()));
+        }
+        if (user.getPhone() != null) existingUser.setPhone(user.getPhone());
+        if (user.getAddress() != null) existingUser.setAddress(user.getAddress());
+        if (user.getCity() != null) existingUser.setCity(user.getCity());
+        if (user.getState() != null) existingUser.setState(user.getState());
+        if (user.getZip() != null) existingUser.setZip(user.getZip());
+        if (user.getCountry() != null) existingUser.setCountry(user.getCountry());
+
+        //Doar pentru roll cand testezi cu postman
+//        if (user.getRole() != null) existingUser.setRole(user.getRole());
+
+
+//        if (user.getIsVerified() != null) existingUser.setIsVerified(user.getIsVerified());
+//        if (user.getVerificationToken() != null) existingUser.setVerificationToken(user.getVerificationToken());
+
+        // Save and return the updated user
+        return userRepository.save(existingUser);
     }
+
 
     @Override
     public User findByuserEmail(String email) {
