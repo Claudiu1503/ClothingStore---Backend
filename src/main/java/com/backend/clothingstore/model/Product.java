@@ -21,10 +21,10 @@ public class Product {
     private String name;
 
     @Enumerated
-    @Column( nullable = false)
+    @Column(nullable = false)
     private Category category;
 
-    @Column( nullable = false)
+    @Column(nullable = false)
     private Double price;
 
     @Column(name = "long_descrption")

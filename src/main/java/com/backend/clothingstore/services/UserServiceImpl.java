@@ -69,12 +69,12 @@ public class UserServiceImpl implements UserService {
 
             existingUser.setPassword(passwordEncoder.encode(user.getPassword()));
         }
-        if (user.getPhone() != null) existingUser.setPhone(user.getPhone());
-        if (user.getAddress() != null) existingUser.setAddress(user.getAddress());
-        if (user.getCity() != null) existingUser.setCity(user.getCity());
-        if (user.getState() != null) existingUser.setState(user.getState());
-        if (user.getZip() != null) existingUser.setZip(user.getZip());
-        if (user.getCountry() != null) existingUser.setCountry(user.getCountry());
+//        if (user.getPhone() != null) existingUser.setPhone(user.getPhone());
+//        if (user.getAddress() != null) existingUser.setAddress(user.getAddress());
+//        if (user.getCity() != null) existingUser.setCity(user.getCity());
+//        if (user.getState() != null) existingUser.setState(user.getState());
+//        if (user.getZip() != null) existingUser.setZip(user.getZip());
+//        if (user.getCountry() != null) existingUser.setCountry(user.getCountry());
 
         //Doar pentru roll cand testezi cu postman
 //        if (user.getRole() != null) existingUser.setRole(user.getRole());
