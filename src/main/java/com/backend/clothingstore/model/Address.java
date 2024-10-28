@@ -9,23 +9,20 @@ import lombok.*;
 @Builder
 
 @Entity
-@Table(name = "address")
+@Table(name = "user_address")
 public class Address {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", nullable = false)
     private Long id;
 
-    @Column(name = "state")
     private String state;
 
-    @Column(name = "zip")
     private String zip;
 
-    @Column(name = "country", nullable = false, length = 75)
+    @Column(nullable = false, length = 75)
     private String country;
 
-    @Column(name = "city", nullable = false)
+    @Column(nullable = false, length = 75)
     private String city;
 
     @Column(name = "address_line_2")
@@ -33,6 +30,9 @@ public class Address {
 
     @Column(name = "address_line_1", nullable = false, length = 512)
     private String addressLine1;
+
+    @Column(nullable = false, length = 10)
+    private String phone;
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "user_id", nullable = false)

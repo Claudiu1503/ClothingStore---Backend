@@ -47,15 +47,6 @@ public class User {
   private Role role;
 
 
-  private String phone;
-  private String address;
-  private String city;
-  private String state;
-  private String zip;
-  private String country;
-
-
-
   private Boolean isVerified;
   private String verificationToken;
 

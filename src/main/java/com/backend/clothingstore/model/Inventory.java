@@ -15,10 +15,8 @@ import lombok.*;
 public class Inventory {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", nullable = false)
     private Long id;
 
-    @Column(name = "quantity")
     private Integer quantity;
 
     @OneToOne(optional = false, orphanRemoval = true)

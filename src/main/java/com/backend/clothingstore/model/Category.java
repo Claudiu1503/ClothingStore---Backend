@@ -1,6 +1,6 @@
 package com.backend.clothingstore.model;
 
-public enum Categorie {
+public enum Category {
 
     BLUZE,
     TRICOURI,
