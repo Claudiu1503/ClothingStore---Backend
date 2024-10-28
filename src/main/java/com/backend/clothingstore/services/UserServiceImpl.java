@@ -77,8 +77,8 @@ public class UserServiceImpl implements UserService {
 //        if (user.getZip() != null) existingUser.setZip(user.getZip());
 //        if (user.getCountry() != null) existingUser.setCountry(user.getCountry());
 
-        //Doar pentru roll cand testezi cu postman
-//        if (user.getRole() != null) existingUser.setRole(user.getRole());
+//        Doar pentru roll cand testezi cu postman
+        if (user.getRole() != null) existingUser.setRole(user.getRole());
 
 
 //        if (user.getIsVerified() != null) existingUser.setIsVerified(user.getIsVerified());

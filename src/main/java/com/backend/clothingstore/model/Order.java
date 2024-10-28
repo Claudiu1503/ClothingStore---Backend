@@ -11,11 +11,11 @@ import lombok.*;
 @Builder
 
 @Entity
-@Table(name = "order")
+@Table(name = "userorder")
 public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private int id;
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "user_id", nullable = false)
