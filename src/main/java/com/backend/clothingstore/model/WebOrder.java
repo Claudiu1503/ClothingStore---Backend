@@ -15,7 +15,6 @@ import lombok.*;
 public class WebOrder {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", nullable = false)
     private Long id;
 
     @ManyToOne(optional = false)
@@ -23,7 +22,7 @@ public class WebOrder {
     private User user;
 
     @ManyToOne(optional = false)
-    @JoinColumn(name = "address_id", nullable = false)
+    @JoinColumn(name = "user_address_id", nullable = false)
     private Address address;
 
 }

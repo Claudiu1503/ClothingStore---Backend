@@ -14,10 +14,9 @@ import lombok.*;
 public class WebOrderQuantity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", nullable = false)
     private Long id;
 
-    @Column(name = "quantity", nullable = false)
+    @Column(nullable = false)
     private Integer quantity;
 
     @ManyToOne(optional = false)
