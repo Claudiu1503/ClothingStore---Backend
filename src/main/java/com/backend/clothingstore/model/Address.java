@@ -9,7 +9,7 @@ import lombok.*;
 @Builder
 
 @Entity
-@Table(name = "user_address")
+@Table(name = "useraddress")
 public class Address {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,11 +25,8 @@ public class Address {
     @Column(nullable = false, length = 75)
     private String city;
 
-    @Column(name = "address_line_2")
-    private String addressLine2;
-
-    @Column(name = "address_line_1", nullable = false, length = 512)
-    private String addressLine1;
+    @Column(name = "addressline", nullable = false, length = 70)
+    private String addressLine;
 
     @Column(nullable = false, length = 10)
     private String phone;

@@ -69,6 +69,7 @@ public class UserServiceImpl implements UserService {
 
             existingUser.setPassword(passwordEncoder.encode(user.getPassword()));
         }
+
 //        if (user.getPhone() != null) existingUser.setPhone(user.getPhone());
 //        if (user.getAddress() != null) existingUser.setAddress(user.getAddress());
 //        if (user.getCity() != null) existingUser.setCity(user.getCity());
@@ -83,6 +84,8 @@ public class UserServiceImpl implements UserService {
 //        if (user.getIsVerified() != null) existingUser.setIsVerified(user.getIsVerified());
 //        if (user.getVerificationToken() != null) existingUser.setVerificationToken(user.getVerificationToken());
 
+
+        existingUser.setUpdatedAt(LocalDateTime.now());
         // Save and return the updated user
         return userRepository.save(existingUser);
     }

@@ -4,23 +4,33 @@ package com.backend.clothingstore.model;
 import jakarta.persistence.*;
 import lombok.*;
 
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 
 @Entity
-@Table(name = "web_order_quantity")
-public class WebOrderQuantity {
+@Table(name = "order")
+public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
-    private Integer quantity;
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
+
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "useraddress_id", nullable = false)
+    private Address address;
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "product_id", nullable = false)
     private Product product;
+
+    @Column(nullable = false)
+    private int quantity;
+
 
 }

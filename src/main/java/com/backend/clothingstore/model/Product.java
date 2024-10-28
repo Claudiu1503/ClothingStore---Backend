@@ -15,7 +15,7 @@ import lombok.*;
 public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private int id;
 
     @Column(nullable = false, unique = true)
     private String name;
@@ -27,6 +27,9 @@ public class Product {
     @Column(nullable = false)
     private Double price;
 
+    @Column(nullable = false)
+    private int quantity;
+
     @Column(name = "long_descrption")
     private String longDescrption;
 
@@ -34,7 +37,5 @@ public class Product {
     private String shortDescription;
 
 
-    @OneToOne(mappedBy = "product", cascade = CascadeType.REMOVE, optional = false, orphanRemoval = true)
-    private Inventory inventory;
 
 }
