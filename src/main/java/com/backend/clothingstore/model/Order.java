@@ -1,9 +1,8 @@
-
 package com.backend.clothingstore.model;
 
 import jakarta.persistence.*;
 import lombok.*;
-
+import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -21,16 +20,9 @@ public class Order {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-//    @ManyToOne(optional = false)
-//    @JoinColumn(name = "useraddress_id", nullable = false)
-//    private Address address;
+    @Embedded
+    private Address address;
 
-    @ManyToOne(optional = false)
-    @JoinColumn(name = "product_id", nullable = false)
-    private Product product;
-
-    @Column(nullable = false)
-    private int quantity;
-
-
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<OrderItem> orderItems;
 }

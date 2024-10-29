@@ -1,6 +1,8 @@
 package com.backend.clothingstore.controllers;
 
 import com.backend.clothingstore.DTO.UserProfileDTO;
+import com.backend.clothingstore.mappers.UserToUserAddress;
+import com.backend.clothingstore.model.Address;
 import com.backend.clothingstore.model.User;
 import com.backend.clothingstore.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +15,8 @@ public class UserController {
 
     @Autowired
     private UserService userService;
+
+    private UserToUserAddress userToUserAddress;
 
     @GetMapping("/admin/profile")
     public ResponseEntity<User> getAdminProfile(@RequestParam String email) {
@@ -56,7 +60,11 @@ public class UserController {
         return ResponseEntity.ok(userProfileDTO);
     }
 
-
+    @GetMapping("/request/{id}/address")
+    public Address getUserAddress(@PathVariable int id) {
+        User user = userService.getUserById(id);
+        return UserToUserAddress.map(user);
+    }
 
 
 }

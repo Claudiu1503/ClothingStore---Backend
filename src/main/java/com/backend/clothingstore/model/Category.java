@@ -1,12 +1,16 @@
 package com.backend.clothingstore.model;
 
 public enum Category {
-
-    BLUZE,
-    TRICOURI,
-    BLUGI,
+    TSHIRTS,
+    JEANS,
+    SHORTS,
+    PANTS,
+    BAGS,
+    TOPS,
+    BLOUSES,
+    HATS,
+    jACKETS,
+    DRESS,
     SNEAKERS,
-    ROCHII,
-    FUSTE,
-    ACESORII
+    ACCESSORIES
 }
