@@ -39,19 +39,6 @@ public class AuthenticationController {
         }
     }
 
-//    @PostMapping("/login")
-//    public ResponseEntity<?> login(@RequestBody LoginRequestDTO loginRequestDTO) {
-//        String email = loginRequestDTO.getEmail();
-//        String password = loginRequestDTO.getPassword();
-//
-//        try {
-//            String message = userService.login(email, password);
-//            // Returnam un obiect JSON cu un mesaj
-//            return ResponseEntity.ok(Collections.singletonMap("message", message));
-//        } catch (IllegalArgumentException e) {
-//            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Collections.singletonMap("error", e.getMessage()));
-//        }
-//    }
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginRequestDTO loginRequestDTO) {

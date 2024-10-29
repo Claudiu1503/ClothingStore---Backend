@@ -116,19 +116,11 @@ public class UserServiceImpl implements UserService {
             existingUser.setPassword(passwordEncoder.encode(user.getPassword()));
         }
 
-//        if (user.getPhone() != null) existingUser.setPhone(user.getPhone());
-//        if (user.getAddress() != null) existingUser.setAddress(user.getAddress());
-//        if (user.getCity() != null) existingUser.setCity(user.getCity());
-//        if (user.getState() != null) existingUser.setState(user.getState());
-//        if (user.getZip() != null) existingUser.setZip(user.getZip());
-//        if (user.getCountry() != null) existingUser.setCountry(user.getCountry());
 
 //        Doar pentru roll cand testezi cu postman
         if (user.getRole() != null) existingUser.setRole(user.getRole());
 
 
-//        if (user.getIsVerified() != null) existingUser.setIsVerified(user.getIsVerified());
-//        if (user.getVerificationToken() != null) existingUser.setVerificationToken(user.getVerificationToken());
 
 
         existingUser.setUpdatedAt(LocalDateTime.now());
@@ -140,7 +132,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public User findByuserEmail(String email) {
         return userRepository.findByEmail(email)
-                .orElseThrow(() -> new UserNotFoundException("User not found"));
+                .orElseThrow(() -> new UserNotFoundException("User not found2222222"));
     }
 
     @Override
@@ -149,7 +141,7 @@ public class UserServiceImpl implements UserService {
             throw new IllegalStateException("Email is already in use");
         }
 
-        // Criptăm parola
+
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         user.setCreatedAt(LocalDateTime.now());
         user.setUpdatedAt(LocalDateTime.now());
