@@ -49,8 +49,8 @@ public class SecurityConfig {
                                 .requestMatchers("/reset/**").permitAll()
                                 .requestMatchers("/user/register", "/user/login").permitAll() // Allow these endpoints without authentication
                                 .requestMatchers("/admin/**").hasRole("ADMIN")
-//                        .anyRequest().authenticated()
-                                .anyRequest().permitAll()
+                        .anyRequest().authenticated()
+//                                .anyRequest().permitAll()
                         //() // All other requests require authentication
                 )
                 .httpBasic(Customizer.withDefaults()); // Use basic authentication

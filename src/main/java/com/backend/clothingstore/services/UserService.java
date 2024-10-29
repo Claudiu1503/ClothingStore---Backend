@@ -1,5 +1,7 @@
 package com.backend.clothingstore.services;
 
+import com.backend.clothingstore.DTO.AddressDTO;
+import com.backend.clothingstore.DTO.UserProfileDTO;
 import com.backend.clothingstore.model.User;
 
 
@@ -11,7 +13,9 @@ public interface UserService {
 
     User authenticate(String email, String password);
 
-    User updateUser(User user);
+    User updateUser(UserProfileDTO userDTO);
+    User updateAdminUser(User user);
 
-    User findByuserEmail(String name);
+    User findByuserEmail(String email);
+    User addAddressToUser(int userId, AddressDTO addressDTO);
 }

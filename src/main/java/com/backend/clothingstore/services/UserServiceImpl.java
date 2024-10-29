@@ -1,8 +1,12 @@
 package com.backend.clothingstore.services;
 
+import com.backend.clothingstore.DTO.AddressDTO;
+import com.backend.clothingstore.DTO.UserProfileDTO;
 import com.backend.clothingstore.errorHeandler.UserNotFoundException;
+import com.backend.clothingstore.model.Address;
 import com.backend.clothingstore.model.Role;
 import com.backend.clothingstore.model.User;
+import com.backend.clothingstore.repositories.AddressRepository;
 import com.backend.clothingstore.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -10,7 +14,6 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
-import java.util.UUID;
 
 
 @Service
@@ -20,6 +23,31 @@ public class UserServiceImpl implements UserService {
     UserRepository userRepository;
     @Autowired
     BCryptPasswordEncoder passwordEncoder;
+
+
+    @Autowired
+    private AddressRepository addressRepository;
+
+    @Override
+    public User addAddressToUser(int userId, AddressDTO addressDTO) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new IllegalArgumentException("User not found with ID: " + userId));
+
+        Address newAddress = Address.builder()
+                .state(addressDTO.getState())
+                .zip(addressDTO.getZip())
+                .country(addressDTO.getCountry())
+                .city(addressDTO.getCity())
+                .addressLine(addressDTO.getAddressLine())
+                .phone(addressDTO.getPhone())
+                .user(user)
+                .build();
+
+        user.getAddresses().add(newAddress);
+        addressRepository.save(newAddress); // Salvăm noua adresă
+        return user;
+    }
+
 
     @Override
     public void save(User user) {
@@ -56,7 +84,25 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User updateUser(User user) {
+    public User updateUser(UserProfileDTO userDTO) {
+
+        User user = userRepository.findById(userDTO.getId())
+                .orElseThrow(() -> new IllegalArgumentException("User not found with ID: " + userDTO.getId()));
+
+        // Actualizăm câmpurile din entitatea User cu datele din DTO, doar cele specifice
+        if (userDTO.getUsername() != null) {
+            user.setUsername(userDTO.getUsername());
+        }
+        user.setFirstName(userDTO.getFirstName());
+        user.setLastName(userDTO.getLastName());
+        user.setEmail(userDTO.getEmail());
+
+        // Salvăm modificările în baza de date
+        return userRepository.save(user);
+    }
+
+    @Override
+    public User updateAdminUser(User user) {
         User existingUser = userRepository.findById(user.getId())
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
