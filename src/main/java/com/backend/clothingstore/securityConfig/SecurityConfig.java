@@ -42,6 +42,13 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                                 .requestMatchers("/user/register", "/user/login").permitAll() // Allow these endpoints without authentication
                                 .requestMatchers("/user/admin/**").hasRole("ADMIN")
+
+                        .requestMatchers("/user/delete/**").hasRole("ADMIN")
+                        .requestMatchers("/product/create").hasRole("ADMIN")
+                        .requestMatchers("/product/update/**").hasRole("ADMIN")
+                        .requestMatchers("/product/delete/**").hasRole("ADMIN")
+                        .requestMatchers("/order/get-all").hasRole("ADMIN")
+
                         .anyRequest().authenticated()
                 )
                 .httpBasic(Customizer.withDefaults());
