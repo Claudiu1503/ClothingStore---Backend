@@ -21,9 +21,9 @@ public class Order {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    @ManyToOne(optional = false)
-    @JoinColumn(name = "useraddress_id", nullable = false)
-    private Address address;
+//    @ManyToOne(optional = false)
+//    @JoinColumn(name = "useraddress_id", nullable = false)
+//    private Address address;
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "product_id", nullable = false)

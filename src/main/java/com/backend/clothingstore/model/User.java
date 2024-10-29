@@ -1,5 +1,6 @@
 package com.backend.clothingstore.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -46,6 +47,13 @@ public class User {
   @Column(nullable = false)
   private Role role;
 
+  private String state;
+  private String zip;
+  private String country;
+  private String city;
+  private String addressLine;
+  private String phone;
+
 
   private Boolean isVerified;
   private String verificationToken;
@@ -54,8 +62,6 @@ public class User {
 
   private LocalDateTime updatedAt;
 
-  @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE, orphanRemoval = true)
-  private List<Address> addresses = new ArrayList<>();
 
   @PrePersist
   public void prePersist() {

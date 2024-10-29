@@ -1,6 +1,5 @@
 package com.backend.clothingstore.controllers;
 
-import com.backend.clothingstore.DTO.AddressDTO;
 import com.backend.clothingstore.DTO.UserProfileDTO;
 import com.backend.clothingstore.model.User;
 import com.backend.clothingstore.services.UserService;
@@ -32,7 +31,14 @@ public class UserController {
         userProfileDTO.setEmail(user.getEmail());
         userProfileDTO.setRole(user.getRole().toString());
         userProfileDTO.setCreatedAt(user.getCreatedAt());
-        userProfileDTO.setAddresses(user.getAddresses());
+
+        // address
+        userProfileDTO.setState(user.getState());
+        userProfileDTO.setZip(user.getZip());
+        userProfileDTO.setCountry(user.getCountry());
+        userProfileDTO.setCity(user.getCity());
+        userProfileDTO.setAddressLine(user.getAddressLine());
+        userProfileDTO.setPhone(user.getPhone());
 
         return ResponseEntity.ok(userProfileDTO);
     }
@@ -50,11 +56,7 @@ public class UserController {
         return ResponseEntity.ok(userProfileDTO);
     }
 
-    @PostMapping("/user/{userId}/address")
-    public ResponseEntity<User> addAddress(@PathVariable int userId, @RequestBody AddressDTO addressDTO) {
-        User user = userService.addAddressToUser(userId, addressDTO);
-        return ResponseEntity.ok(user);
-    }
+
 
 
 }

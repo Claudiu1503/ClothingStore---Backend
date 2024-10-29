@@ -23,12 +23,8 @@ import java.util.Arrays;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
-import java.util.Arrays;
-
-
 
 @Configuration
-
 public class SecurityConfig {
 
     @Bean
@@ -44,17 +40,11 @@ public class SecurityConfig {
 
                 .csrf(csrf -> csrf.disable()) // Deactivate CSRF
                 .authorizeHttpRequests(auth -> auth
-                                .requestMatchers("/user-confirmation").permitAll()
-                                .requestMatchers("/api/reset-password").permitAll()
-                                .requestMatchers("/reset/**").permitAll()
                                 .requestMatchers("/user/register", "/user/login").permitAll() // Allow these endpoints without authentication
-                                .requestMatchers("/admin/**").hasRole("ADMIN")
+                                .requestMatchers("/user/admin/**").hasRole("ADMIN")
                         .anyRequest().authenticated()
-//                                .anyRequest().permitAll()
-                        //() // All other requests require authentication
                 )
-                .httpBasic(Customizer.withDefaults()); // Use basic authentication
-
+                .httpBasic(Customizer.withDefaults());
 
         return http.build();
     }
@@ -67,7 +57,7 @@ public class SecurityConfig {
     @Autowired
     UserRepository userRepository;
 
-    // Definirea UserDetailsService dacă vrei să folosești o implementare custom.
+
     @Bean
     public UserDetailsService userDetailsService() {
         return new UserDetailsService() {

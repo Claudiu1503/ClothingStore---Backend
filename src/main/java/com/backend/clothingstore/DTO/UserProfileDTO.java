@@ -1,7 +1,6 @@
 package com.backend.clothingstore.DTO;
 
 
-import com.backend.clothingstore.model.Address;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -18,5 +17,11 @@ public class UserProfileDTO {
     private String email;
     private String role;
     private LocalDateTime createdAt;
-    private List<Address> addresses;
+    private String state;
+    private String zip;
+    private String country;
+    private String city;
+    private String addressLine;
+    private String phone;
+
 }
