@@ -9,7 +9,7 @@ public enum Category {
     TOPS,
     BLOUSES,
     HATS,
-    jACKETS,
+    JACKETS,
     DRESS,
     SNEAKERS,
     ACCESSORIES

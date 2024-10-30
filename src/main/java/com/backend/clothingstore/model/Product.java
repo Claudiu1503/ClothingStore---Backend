@@ -20,7 +20,7 @@ public class Product {
     @Column(nullable = false, unique = true)
     private String name;
 
-    @Enumerated
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private Category category;
 
@@ -31,7 +31,7 @@ public class Product {
     private int quantity;
 
     @Column(name = "long_descrption")
-    private String longDescrption;
+    private String longDescription;
 
     @Column(name = "short_description", nullable = false)
     private String shortDescription;
