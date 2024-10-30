@@ -10,7 +10,7 @@ public interface UserService {
     User register(User user);
     String login(String email, String password);
 
-    User authenticate(String email, String password);
+    User authenticate(String email, String password, String role);
 
     User updateUser(UserProfileDTO userDTO);
     User updateAdminUser(User user);

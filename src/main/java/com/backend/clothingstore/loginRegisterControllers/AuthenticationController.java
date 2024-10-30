@@ -42,12 +42,14 @@ public class AuthenticationController {
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginRequestDTO loginRequestDTO) {
-        User user = userService.authenticate(loginRequestDTO.getEmail(), loginRequestDTO.getPassword());
+        User user = userService.authenticate(loginRequestDTO.getEmail(), loginRequestDTO.getPassword(), loginRequestDTO.getRole());
 
         if (user != null) {
             Map<String, String> response = new HashMap<>();
             response.put("message", "Login successful");
             response.put("username", user.getUsername());
+            response.put("email", user.getEmail());
+            response.put("role", user.getRole().toString());
 
             return ResponseEntity.ok(response);
         } else {

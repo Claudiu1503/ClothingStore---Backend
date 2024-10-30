@@ -40,7 +40,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User authenticate(String email, String password) {
+    public User authenticate(String email, String password,String role) {
         Optional<User> optionalUser = userRepository.findByEmail(email);
 
         if (optionalUser.isPresent()) {
