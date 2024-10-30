@@ -48,6 +48,7 @@ public class SecurityConfig {
                         .requestMatchers("/product/update/**").hasRole("ADMIN")
                         .requestMatchers("/product/delete/**").hasRole("ADMIN")
                         .requestMatchers("/order/get-all").hasRole("ADMIN")
+                        .requestMatchers("/product/get-all").permitAll()
 
                         .anyRequest().authenticated()
                 )
