@@ -31,16 +31,35 @@ public class ProductServiceImpl implements ProductService {
     public Product updateProduct(int id, Product productDetails) {
         Product product = productRepository.findById(id).orElse(null);
         if (product != null) {
-            product.setName(productDetails.getName());
-            product.setCategory(productDetails.getCategory());
-            product.setPrice(productDetails.getPrice());
-            product.setQuantity(productDetails.getQuantity());
-            product.setLongDescription(productDetails.getLongDescription());
-            product.setShortDescription(productDetails.getShortDescription());
+            if (productDetails.getName() != null) {
+                product.setName(productDetails.getName());
+            }
+            if (productDetails.getCategory() != null) {
+                product.setCategory(productDetails.getCategory());
+            }
+            if (productDetails.getPrice() != null) {
+                product.setPrice(productDetails.getPrice());
+            }
+            if (productDetails.getQuantity() != -1) {
+                product.setQuantity(productDetails.getQuantity());
+            }
+            if (productDetails.getLongDescription() != null) {
+                product.setLongDescription(productDetails.getLongDescription());
+            }
+            if (productDetails.getShortDescription() != null) {
+                product.setShortDescription(productDetails.getShortDescription());
+            }
+            if (productDetails.getGender() != null) {
+                product.setGender(productDetails.getGender());
+            }
+            if (productDetails.getColor() != null) {
+                product.setColor(productDetails.getColor());
+            }
             return productRepository.save(product);
         }
         return null;
     }
+
 
     @Override
     public boolean deleteProduct(int id) {

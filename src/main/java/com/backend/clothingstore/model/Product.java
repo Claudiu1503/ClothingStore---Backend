@@ -24,6 +24,12 @@ public class Product {
     @Column(nullable = false)
     private Category category;
 
+    @Enumerated(EnumType.STRING)
+    private ProductGender gender;
+
+    @Enumerated(EnumType.STRING)
+    private ProductColor color;
+
     @Column(nullable = false)
     private Double price;
 
