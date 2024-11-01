@@ -49,6 +49,7 @@ public class SecurityConfig {
                         .requestMatchers("/product/delete/**").hasRole("ADMIN")
                         .requestMatchers("/order/get-all").hasRole("ADMIN")
                         .requestMatchers("/product/get-all").permitAll()
+                        .requestMatchers("/product/view/**").permitAll()
 
                         .anyRequest().authenticated()
                 )
