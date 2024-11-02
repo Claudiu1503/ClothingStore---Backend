@@ -29,6 +29,8 @@ public class Product {
 
     @Enumerated(EnumType.STRING)
     private ProductColor color;
+    @Enumerated(EnumType.STRING)
+    private Brand brand;
 
     @Column(nullable = false)
     private Double price;

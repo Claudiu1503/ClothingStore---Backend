@@ -55,6 +55,11 @@ public class ProductServiceImpl implements ProductService {
             if (productDetails.getColor() != null) {
                 product.setColor(productDetails.getColor());
             }
+            if(productDetails.getBrand() != null) {
+                product.setBrand(productDetails.getBrand());
+            }
+
+
             return productRepository.save(product);
         }
         return null;
