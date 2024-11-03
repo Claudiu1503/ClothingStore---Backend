@@ -18,4 +18,6 @@ public interface UserService {
     User findByuserEmail(String email);
 
     User getUserById(int id);
+
+    void deleteUser(int id);
 }

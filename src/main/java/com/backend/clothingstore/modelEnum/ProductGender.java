@@ -1,4 +1,4 @@
-package com.backend.clothingstore.model;
+package com.backend.clothingstore.modelEnum;
 
 public enum ProductGender {
     MALE,

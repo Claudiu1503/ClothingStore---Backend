@@ -4,6 +4,7 @@ import com.backend.clothingstore.DTO.UserProfileDTO;
 import com.backend.clothingstore.mappers.UserToUserAddress;
 import com.backend.clothingstore.model.Address;
 import com.backend.clothingstore.model.User;
+import com.backend.clothingstore.registerConfirmation.ConfirmationTokenRepository;
 import com.backend.clothingstore.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +18,9 @@ public class UserController {
     private UserService userService;
 
     private UserToUserAddress userToUserAddress;
+
+    @Autowired
+    private ConfirmationTokenRepository confirmationTokenRepository;
 
     @GetMapping("/admin/profile")
     public ResponseEntity<User> getAdminProfile(@RequestParam String email) {
@@ -64,6 +68,13 @@ public class UserController {
     public Address getUserAddress(@PathVariable int id) {
         User user = userService.getUserById(id);
         return UserToUserAddress.map(user);
+    }
+
+    @DeleteMapping( "/admin/delete/{id}")
+    public ResponseEntity<?> deleteUser(@PathVariable int id) {
+        confirmationTokenRepository.deleteById(id);
+        userService.deleteUser(id);
+        return ResponseEntity.ok("User deleted successfully");
     }
 
 

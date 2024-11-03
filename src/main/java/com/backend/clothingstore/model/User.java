@@ -1,13 +1,11 @@
 package com.backend.clothingstore.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.backend.clothingstore.modelEnum.Role;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
 
 @Data

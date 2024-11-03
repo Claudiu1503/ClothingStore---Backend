@@ -43,13 +43,15 @@ public class SecurityConfig {
                                 .requestMatchers("/user/register", "/user/login").permitAll() // Allow these endpoints without authentication
                                 .requestMatchers("/user/admin/**").hasRole("ADMIN")
 
-                        .requestMatchers("/user/delete/**").hasRole("ADMIN")
+                        .requestMatchers("/user/admin/delete/**").hasRole("ADMIN")
                         .requestMatchers("/product/create").hasRole("ADMIN")
                         .requestMatchers("/product/update/**").hasRole("ADMIN")
                         .requestMatchers("/product/delete/**").hasRole("ADMIN")
+                        .requestMatchers("/admin/delete-token/**").hasRole("ADMIN")
                         .requestMatchers("/order/get-all").hasRole("ADMIN")
                         .requestMatchers("/product/get-all").permitAll()
                         .requestMatchers("/product/view/**").permitAll()
+                        .requestMatchers("/user-confirmation**").permitAll()
 
                         .anyRequest().authenticated()
                 )
