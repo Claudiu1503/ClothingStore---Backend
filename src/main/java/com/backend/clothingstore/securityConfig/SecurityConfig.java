@@ -43,6 +43,9 @@ public class SecurityConfig {
                                 .requestMatchers("/user/register", "/user/login").permitAll() // Allow these endpoints without authentication
                                 .requestMatchers("/user/admin/**").hasRole("ADMIN")
 
+                                .requestMatchers("/reset/**").permitAll()
+
+
                         .requestMatchers("/user/admin/delete/**").hasRole("ADMIN")
                         .requestMatchers("/product/create").hasRole("ADMIN")
                         .requestMatchers("/product/update/**").hasRole("ADMIN")

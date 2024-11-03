@@ -18,6 +18,22 @@ public class EmailService implements EmailSender{
 
 
     private JavaMailSender mailSender;
+    @Override
+    @Async
+    public void sendPassChange(String to, String email){
+        try {
+            MimeMessage message = mailSender.createMimeMessage();
+            MimeMessageHelper helper = new MimeMessageHelper(message, "utf-8");
+            helper.setText(email, true);
+            helper.setTo(to);
+            helper.setSubject("Request for password change");
+            helper.setFrom("fashonclothingstore@gmail.com");
+            mailSender.send(message);
+        }catch (MessagingException e) {
+            LOGGER.error("fail to send email", e);
+            throw new IllegalStateException("fail to send email");
+        }
+    }
 
     @Override
     @Async
