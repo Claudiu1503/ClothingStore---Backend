@@ -54,6 +54,7 @@ public class SecurityConfig {
                         .requestMatchers("/user-confirmation**").permitAll()
 
                         .anyRequest().authenticated()
+//                                .anyRequest().permitAll()
                 )
                 .httpBasic(Customizer.withDefaults());
 
