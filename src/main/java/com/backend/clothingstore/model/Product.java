@@ -33,7 +33,9 @@ public class Product {
 
     @Enumerated(EnumType.STRING)
     private ProductColor color;
+
     @Enumerated(EnumType.STRING)
+    @Column(length = 400)
     private Brand brand;
 
     @Column(nullable = false)
