@@ -1,10 +1,10 @@
 
 package com.backend.clothingstore.model;
 
-import com.backend.clothingstore.modelEnum.Brand;
-import com.backend.clothingstore.modelEnum.Category;
-import com.backend.clothingstore.modelEnum.ProductColor;
-import com.backend.clothingstore.modelEnum.ProductGender;
+import com.backend.clothingstore.model.modelEnum.Brand;
+import com.backend.clothingstore.model.modelEnum.Category;
+import com.backend.clothingstore.model.modelEnum.ProductColor;
+import com.backend.clothingstore.model.modelEnum.ProductGender;
 import jakarta.persistence.*;
 import lombok.*;
 

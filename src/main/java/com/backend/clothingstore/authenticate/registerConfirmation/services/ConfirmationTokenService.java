@@ -1,6 +1,7 @@
-package com.backend.clothingstore.registerConfirmation;
+package com.backend.clothingstore.authenticate.registerConfirmation.services;
 
 
+import com.backend.clothingstore.authenticate.registerConfirmation.repository.ConfirmationTokenRepository;
 import com.backend.clothingstore.model.ConfirmationToken;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;

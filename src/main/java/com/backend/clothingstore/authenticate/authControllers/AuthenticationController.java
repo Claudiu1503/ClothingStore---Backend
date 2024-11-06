@@ -1,4 +1,4 @@
-package com.backend.clothingstore.loginRegisterControllers;
+package com.backend.clothingstore.authenticate.authControllers;
 
 import com.backend.clothingstore.DTO.LoginRequestDTO;
 import com.backend.clothingstore.errorHeandler.ConcreteErrorResponse;
@@ -8,12 +8,8 @@ import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.ErrorResponse;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Base64;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 

@@ -1,6 +1,7 @@
-package com.backend.clothingstore.registerConfirmation;
+package com.backend.clothingstore.authenticate.registerConfirmation.controller;
 
 
+import com.backend.clothingstore.authenticate.registerConfirmation.services.ConfirmationTokenService;
 import com.backend.clothingstore.model.ConfirmationToken;
 import com.backend.clothingstore.model.User;
 import com.backend.clothingstore.services.UserService;

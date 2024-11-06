@@ -1,7 +1,8 @@
-package com.backend.clothingstore.services;
+package com.backend.clothingstore.servicesImpl;
 
 import com.backend.clothingstore.model.Product;
 import com.backend.clothingstore.repositories.ProductRepository;
+import com.backend.clothingstore.services.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

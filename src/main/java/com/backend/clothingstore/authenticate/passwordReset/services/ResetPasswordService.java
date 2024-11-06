@@ -1,11 +1,11 @@
-package com.backend.clothingstore.passwordReset;
+package com.backend.clothingstore.authenticate.passwordReset.services;
 
 import com.backend.clothingstore.DTO.EmailDTO;
+import com.backend.clothingstore.authenticate.passwordReset.repository.ResetPasswordRepository;
 import com.backend.clothingstore.email.EmailSender;
 import com.backend.clothingstore.model.ResetPasswordToken;
 import com.backend.clothingstore.model.User;
-import com.backend.clothingstore.registerConfirmation.ConfirmationTokenRepository;
-import com.backend.clothingstore.registerConfirmation.ConfirmationTokenService;
+import com.backend.clothingstore.authenticate.registerConfirmation.services.ConfirmationTokenService;
 import com.backend.clothingstore.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

@@ -1,6 +1,5 @@
-package com.backend.clothingstore.passwordReset;
+package com.backend.clothingstore.authenticate.passwordReset.repository;
 
-import com.backend.clothingstore.model.ConfirmationToken;
 import com.backend.clothingstore.model.ResetPasswordToken;
 import org.springframework.data.jpa.repository.JpaRepository;
 

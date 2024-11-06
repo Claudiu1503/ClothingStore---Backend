@@ -1,4 +1,4 @@
-package com.backend.clothingstore.registerConfirmation;
+package com.backend.clothingstore.authenticate.registerConfirmation.repository;
 
 import com.backend.clothingstore.model.ConfirmationToken;
 import org.springframework.data.jpa.repository.JpaRepository;

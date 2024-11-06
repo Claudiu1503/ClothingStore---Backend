@@ -1,4 +1,4 @@
-package com.backend.clothingstore.modelEnum;
+package com.backend.clothingstore.model.modelEnum;
 
 public enum Brand {
     ADIDAS,

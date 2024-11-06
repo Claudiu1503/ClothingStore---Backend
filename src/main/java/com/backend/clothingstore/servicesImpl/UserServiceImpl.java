@@ -1,13 +1,14 @@
-package com.backend.clothingstore.services;
+package com.backend.clothingstore.servicesImpl;
 
 import com.backend.clothingstore.DTO.UserProfileDTO;
 import com.backend.clothingstore.email.EmailSender;
 import com.backend.clothingstore.errorHeandler.UserNotFoundException;
 import com.backend.clothingstore.model.ConfirmationToken;
-import com.backend.clothingstore.modelEnum.Role;
+import com.backend.clothingstore.model.modelEnum.Role;
 import com.backend.clothingstore.model.User;
-import com.backend.clothingstore.registerConfirmation.ConfirmationTokenService;
+import com.backend.clothingstore.authenticate.registerConfirmation.services.ConfirmationTokenService;
 import com.backend.clothingstore.repositories.UserRepository;
+import com.backend.clothingstore.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;

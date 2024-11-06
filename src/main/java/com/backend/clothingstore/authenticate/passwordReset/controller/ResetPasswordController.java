@@ -1,8 +1,8 @@
-package com.backend.clothingstore.passwordReset;
+package com.backend.clothingstore.authenticate.passwordReset.controller;
 
 import com.backend.clothingstore.DTO.EmailDTO;
 import com.backend.clothingstore.DTO.TokenPasswordDTO;
-import com.backend.clothingstore.services.UserService;
+import com.backend.clothingstore.authenticate.passwordReset.services.ResetPasswordService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;

@@ -1,10 +1,11 @@
-package com.backend.clothingstore.services;
+package com.backend.clothingstore.servicesImpl;
 
 import com.backend.clothingstore.model.Order;
 import com.backend.clothingstore.model.OrderItem;
 import com.backend.clothingstore.repositories.OrderItemRepository;
 import com.backend.clothingstore.repositories.OrderRepository;
 import com.backend.clothingstore.repositories.UserRepository;
+import com.backend.clothingstore.services.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

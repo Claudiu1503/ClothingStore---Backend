@@ -2,6 +2,7 @@ package com.backend.clothingstore.services;
 
 import com.backend.clothingstore.model.Product;
 import com.backend.clothingstore.repositories.ProductRepository;
+import com.backend.clothingstore.servicesImpl.ProductServiceImpl;
 import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

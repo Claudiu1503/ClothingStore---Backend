@@ -4,7 +4,7 @@ import com.backend.clothingstore.DTO.UserProfileDTO;
 import com.backend.clothingstore.mappers.UserToUserAddress;
 import com.backend.clothingstore.model.Address;
 import com.backend.clothingstore.model.User;
-import com.backend.clothingstore.registerConfirmation.ConfirmationTokenRepository;
+import com.backend.clothingstore.authenticate.registerConfirmation.repository.ConfirmationTokenRepository;
 import com.backend.clothingstore.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
