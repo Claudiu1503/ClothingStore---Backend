@@ -4,6 +4,7 @@ import com.backend.clothingstore.model.Product;
 import com.backend.clothingstore.repositories.ProductRepository;
 import com.backend.clothingstore.services.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -25,7 +26,8 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public List<Product> getAllProducts() {
-        return productRepository.findAll();
+//        return productRepository.findAll();
+        return productRepository.findAll(Sort.by(Sort.Order.desc("id")));
     }
 
     @Override
