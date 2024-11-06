@@ -35,7 +35,7 @@ public class Product {
     private ProductColor color;
 
     @Enumerated(EnumType.STRING)
-    @Column(length = 600)
+    @Column(length = 512)
     private Brand brand;
 
     @Column(nullable = false)
