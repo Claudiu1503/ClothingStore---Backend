@@ -32,6 +32,7 @@ public class Review {
 
     @NotNull
     @NotBlank
+    @Column(length = 512)
     private String content;
 
     @NotNull
