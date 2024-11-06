@@ -38,7 +38,7 @@ public class AuthenticationController {
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginRequestDTO loginRequestDTO) {
-        User user = userService.authenticate(loginRequestDTO.getEmail(), loginRequestDTO.getPassword(), loginRequestDTO.getRole());
+        User user = userService.authenticate(loginRequestDTO.getEmail(), loginRequestDTO.getPassword(), loginRequestDTO.getRole(), loginRequestDTO.getId());
 
         if (user != null) {
             Map<String, String> response = new HashMap<>();
@@ -46,6 +46,7 @@ public class AuthenticationController {
             response.put("username", user.getUsername());
             response.put("email", user.getEmail());
             response.put("role", user.getRole().toString());
+            response.put("id",String.valueOf(user.getId()));
 
             return ResponseEntity.ok(response);
         } else {

@@ -55,6 +55,7 @@ public class SecurityConfig {
                         .requestMatchers("/product/get-all").permitAll()
                         .requestMatchers("/product/view/**").permitAll()
                         .requestMatchers("/user-confirmation**").permitAll()
+                                .requestMatchers("/reviews/product/**").permitAll()
 
                         .anyRequest().authenticated()
 //                                .anyRequest().permitAll()
