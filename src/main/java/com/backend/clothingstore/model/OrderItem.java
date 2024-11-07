@@ -20,12 +20,12 @@ public class OrderItem {
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "order_id", nullable = false)
-    @JsonIgnoreProperties("orderItems")
+    @JsonBackReference
     private Order order;
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "product_id", nullable = false)
-    @JsonBackReference
+    @JsonIgnoreProperties({"category", "gender","color", "brand", "price", "quantity", "longDescription", "shortDescription"})
     private Product product;
 
     @Column(nullable = false)

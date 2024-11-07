@@ -23,13 +23,10 @@ import java.util.List;
 public class OrderServiceImpl implements OrderService {
     @Autowired
     private OrderRepository orderRepository;
-
     @Autowired
     private ProductRepository productRepository;
-
     @Autowired
     private OrderItemRepository orderItemRepository;
-
     @Autowired
     private UserRepository userRepository;
 
@@ -41,7 +38,7 @@ public class OrderServiceImpl implements OrderService {
 
         Order order = new Order();
         order.setUser(user);
-        order.setAddress(orderDTO.getAddress());
+
 
         List<OrderItem> orderItems = new ArrayList<>();
         double total = 0;
@@ -64,7 +61,7 @@ public class OrderServiceImpl implements OrderService {
             product.setQuantity(product.getQuantity() - itemDTO.getQuantity());
             productRepository.save(product);
         }
-
+        order.setTotal(total);
         order.setOrderItems(orderItems);
         orderRepository.save(order);
 
@@ -87,7 +84,6 @@ public class OrderServiceImpl implements OrderService {
         Order order = orderRepository.findById(id).orElse(null);
         if (order == null) return null;
 
-        order.setAddress(orderDTO.getAddress());
 
         List<OrderItem> updatedOrderItems = new ArrayList<>();
         for (OrderItemDTO itemDTO : orderDTO.getItems()) {

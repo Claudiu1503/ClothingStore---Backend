@@ -18,11 +18,9 @@ import java.util.List;
 @RestController
 @RequestMapping("/order")
 public class OrderController {
-    @Autowired
-    private OrderService orderService;
 
     @Autowired
-    private UserService userService;
+    private OrderService orderService;
 
     @PostMapping("/create")
     public ResponseEntity<?> createOrder(@RequestBody @Valid OrderDTO orderDTO) {
@@ -32,7 +30,7 @@ public class OrderController {
         } catch (InsufficientStockException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Insufficient stock for one or more items.");
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred while creating the order.");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error creating order.");
         }
     }
 
@@ -47,8 +45,7 @@ public class OrderController {
 
     @GetMapping("/get-all")
     public ResponseEntity<List<Order>> getAllOrders() {
-        List<Order> orders = orderService.getAllOrders();
-        return ResponseEntity.ok(orders);
+        return ResponseEntity.ok(orderService.getAllOrders());
     }
 
     @PutMapping("/update-order/{id}")
@@ -62,7 +59,7 @@ public class OrderController {
         } catch (InsufficientStockException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Insufficient stock for one or more items.");
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred while updating the order.");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error updating order.");
         }
     }
 
@@ -86,7 +83,7 @@ public class OrderController {
         } catch (InsufficientStockException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Insufficient stock for product ID " + orderItemDTO.getProductId());
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred while adding the item to the order.");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error adding item to order.");
         }
     }
 
@@ -99,4 +96,3 @@ public class OrderController {
         return ResponseEntity.noContent().build();
     }
 }
-
