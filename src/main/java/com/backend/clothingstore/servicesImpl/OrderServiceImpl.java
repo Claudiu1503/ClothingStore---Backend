@@ -79,6 +79,12 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
+    public List<Order> getAllUserOrders(int id) {
+     return orderRepository.findByUserId(id);
+    }
+
+
+    @Override
     @Transactional
     public Order updateOrder(int id, OrderDTO orderDTO) throws InsufficientStockException {
         Order order = orderRepository.findById(id).orElse(null);
@@ -162,6 +168,8 @@ public class OrderServiceImpl implements OrderService {
 
         return true;
     }
+
+
 }
 
 
