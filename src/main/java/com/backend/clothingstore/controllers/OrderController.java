@@ -1,11 +1,15 @@
 package com.backend.clothingstore.controllers;
 
+import com.backend.clothingstore.DTO.OrderDTO;
+import com.backend.clothingstore.DTO.OrderItemDTO;
+import com.backend.clothingstore.errorHeandler.InsufficientStockException;
 import com.backend.clothingstore.model.Order;
 import com.backend.clothingstore.model.OrderItem;
 import com.backend.clothingstore.services.OrderService;
 import com.backend.clothingstore.services.UserService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,16 +25,22 @@ public class OrderController {
     private UserService userService;
 
     @PostMapping("/create")
-    public ResponseEntity<Order> createOrder(@RequestBody @Valid Order order) {
-        Order createdOrder = orderService.createOrder(order);
-        return ResponseEntity.ok(createdOrder);
+    public ResponseEntity<?> createOrder(@RequestBody @Valid OrderDTO orderDTO) {
+        try {
+            Order createdOrder = orderService.createOrder(orderDTO);
+            return ResponseEntity.ok(createdOrder);
+        } catch (InsufficientStockException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Insufficient stock for one or more items.");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred while creating the order.");
+        }
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<Order> getOrderById(@PathVariable int id) {
+    @GetMapping("/orderid/{id}")
+    public ResponseEntity<?> getOrderById(@PathVariable int id) {
         Order order = orderService.getOrderById(id);
         if (order == null) {
-            return ResponseEntity.notFound().build();
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Order with ID " + id + " not found.");
         }
         return ResponseEntity.ok(order);
     }
@@ -42,40 +52,51 @@ public class OrderController {
     }
 
     @PutMapping("/update-order/{id}")
-    public ResponseEntity<Order> updateOrder(@PathVariable int id, @RequestBody @Valid Order orderDetails) {
-        Order updatedOrder = orderService.updateOrder(id, orderDetails);
-        if (updatedOrder == null) {
-            return ResponseEntity.notFound().build();
+    public ResponseEntity<?> updateOrder(@PathVariable int id, @RequestBody @Valid OrderDTO orderDTO) {
+        try {
+            Order updatedOrder = orderService.updateOrder(id, orderDTO);
+            if (updatedOrder == null) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Order with ID " + id + " not found.");
+            }
+            return ResponseEntity.ok(updatedOrder);
+        } catch (InsufficientStockException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Insufficient stock for one or more items.");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred while updating the order.");
         }
-        return ResponseEntity.ok(updatedOrder);
     }
 
     @DeleteMapping("/delete-order/{id}")
-    public ResponseEntity<Void> deleteOrder(@PathVariable int id) {
+    public ResponseEntity<String> deleteOrder(@PathVariable int id) {
         boolean isDeleted = orderService.deleteOrder(id);
         if (!isDeleted) {
-            return ResponseEntity.notFound().build();
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Order with ID " + id + " not found.");
         }
         return ResponseEntity.noContent().build();
     }
 
     @PostMapping("/{orderId}/add-items")
-    public ResponseEntity<OrderItem> addItemToOrder(@PathVariable int orderId, @RequestBody @Valid OrderItem orderItem) {
-        OrderItem createdOrderItem = orderService.addItemToOrder(orderId, orderItem);
-        if (createdOrderItem == null) {
-            return ResponseEntity.notFound().build();
+    public ResponseEntity<?> addItemToOrder(@PathVariable int orderId, @RequestBody @Valid OrderItemDTO orderItemDTO) {
+        try {
+            OrderItem createdOrderItem = orderService.addItemToOrder(orderId, orderItemDTO);
+            if (createdOrderItem == null) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Order with ID " + orderId + " not found.");
+            }
+            return ResponseEntity.ok(createdOrderItem);
+        } catch (InsufficientStockException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Insufficient stock for product ID " + orderItemDTO.getProductId());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred while adding the item to the order.");
         }
-        return ResponseEntity.ok(createdOrderItem);
     }
 
-    @DeleteMapping("/{orderId}/remove-item/{itemId}")
-    public ResponseEntity<Void> removeItemFromOrder(@PathVariable int orderId, @PathVariable int itemId) {
+    @DeleteMapping("/remove-itm/orderid/{orderId}/remove-item/{itemId}")
+    public ResponseEntity<String> removeItemFromOrder(@PathVariable int orderId, @PathVariable int itemId) {
         boolean isRemoved = orderService.removeItemFromOrder(orderId, itemId);
         if (!isRemoved) {
-            return ResponseEntity.notFound().build();
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Order item with ID " + itemId + " not found in order ID " + orderId + ".");
         }
         return ResponseEntity.noContent().build();
     }
-
-
 }
+

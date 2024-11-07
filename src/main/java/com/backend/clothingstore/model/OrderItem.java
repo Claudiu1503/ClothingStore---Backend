@@ -1,6 +1,7 @@
 package com.backend.clothingstore.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Min;
 import lombok.*;
 
 @Data
@@ -24,6 +25,7 @@ public class OrderItem {
     private Product product;
 
     @Column(nullable = false)
+    @Min(value = 1, message = "Quantity must be at least 1")
     private int quantity;
 }
 

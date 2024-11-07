@@ -1,21 +1,31 @@
 package com.backend.clothingstore.servicesImpl;
 
+import com.backend.clothingstore.DTO.OrderDTO;
+import com.backend.clothingstore.DTO.OrderItemDTO;
+import com.backend.clothingstore.errorHeandler.InsufficientStockException;
 import com.backend.clothingstore.model.Order;
 import com.backend.clothingstore.model.OrderItem;
+import com.backend.clothingstore.model.Product;
+import com.backend.clothingstore.model.User;
 import com.backend.clothingstore.repositories.OrderItemRepository;
 import com.backend.clothingstore.repositories.OrderRepository;
+import com.backend.clothingstore.repositories.ProductRepository;
 import com.backend.clothingstore.repositories.UserRepository;
 import com.backend.clothingstore.services.OrderService;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
-
 
 @Service
 public class OrderServiceImpl implements OrderService {
     @Autowired
     private OrderRepository orderRepository;
+
+    @Autowired
+    private ProductRepository productRepository;
 
     @Autowired
     private OrderItemRepository orderItemRepository;
@@ -24,8 +34,41 @@ public class OrderServiceImpl implements OrderService {
     private UserRepository userRepository;
 
     @Override
-    public Order createOrder(Order order) {
-        return orderRepository.save(order);
+    @Transactional
+    public Order createOrder(OrderDTO orderDTO) throws InsufficientStockException {
+        User user = userRepository.findById(orderDTO.getUserId())
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        Order order = new Order();
+        order.setUser(user);
+        order.setAddress(orderDTO.getAddress());
+
+        List<OrderItem> orderItems = new ArrayList<>();
+        double total = 0;
+
+        for (OrderItemDTO itemDTO : orderDTO.getItems()) {
+            Product product = productRepository.findById(itemDTO.getProductId())
+                    .orElseThrow(() -> new RuntimeException("Product not found"));
+
+            if (product.getQuantity() < itemDTO.getQuantity()) {
+                throw new InsufficientStockException("Insufficient stock for product " + product.getName());
+            }
+
+            OrderItem orderItem = new OrderItem();
+            orderItem.setProduct(product);
+            orderItem.setQuantity(itemDTO.getQuantity());
+            orderItem.setOrder(order);
+            orderItems.add(orderItem);
+
+            total += product.getPrice() * itemDTO.getQuantity();
+            product.setQuantity(product.getQuantity() - itemDTO.getQuantity());
+            productRepository.save(product);
+        }
+
+        order.setOrderItems(orderItems);
+        orderRepository.save(order);
+
+        return order;
     }
 
     @Override
@@ -39,43 +82,90 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public Order updateOrder(int id, Order orderDetails) {
+    @Transactional
+    public Order updateOrder(int id, OrderDTO orderDTO) throws InsufficientStockException {
         Order order = orderRepository.findById(id).orElse(null);
-        if (order != null) {
-            order.setUser(orderDetails.getUser());
-            order.setAddress(orderDetails.getAddress());
-            return orderRepository.save(order);
-        }
-        return null;
-    }
+        if (order == null) return null;
 
-    @Override
-    public boolean deleteOrder(int id) {
-        if (orderRepository.existsById(id)) {
-            orderRepository.deleteById(id);
-            return true;
-        }
-        return false;
-    }
+        order.setAddress(orderDTO.getAddress());
 
-    @Override
-    public OrderItem addItemToOrder(int orderId, OrderItem orderItem) {
-        Order order = orderRepository.findById(orderId).orElse(null);
-        if (order != null) {
+        List<OrderItem> updatedOrderItems = new ArrayList<>();
+        for (OrderItemDTO itemDTO : orderDTO.getItems()) {
+            Product product = productRepository.findById(itemDTO.getProductId())
+                    .orElseThrow(() -> new RuntimeException("Product not found"));
+
+            if (product.getQuantity() < itemDTO.getQuantity()) {
+                throw new InsufficientStockException("Insufficient stock for product " + product.getName());
+            }
+
+            OrderItem orderItem = new OrderItem();
+            orderItem.setProduct(product);
+            orderItem.setQuantity(itemDTO.getQuantity());
             orderItem.setOrder(order);
-            return orderItemRepository.save(orderItem);
+            updatedOrderItems.add(orderItem);
+
+            product.setQuantity(product.getQuantity() - itemDTO.getQuantity());
+            productRepository.save(product);
         }
-        return null;
+
+        order.setOrderItems(updatedOrderItems);
+        orderRepository.save(order);
+
+        return order;
     }
 
     @Override
-    public boolean removeItemFromOrder(int orderId, int itemId) {
-        OrderItem orderItem = orderItemRepository.findById(itemId).orElse(null);
-        if (orderItem != null && orderItem.getOrder().getId() == orderId) {
-            orderItemRepository.delete(orderItem);
-            return true;
-        }
-        return false;
+    @Transactional
+    public boolean deleteOrder(int id) {
+        if (!orderRepository.existsById(id)) return false;
+        orderRepository.deleteById(id);
+        return true;
     }
 
+    @Override
+    @Transactional
+    public OrderItem addItemToOrder(int orderId, OrderItemDTO orderItemDTO) throws InsufficientStockException {
+        Order order = orderRepository.findById(orderId).orElse(null);
+        if (order == null) return null;
+
+        Product product = productRepository.findById(orderItemDTO.getProductId())
+                .orElseThrow(() -> new RuntimeException("Product not found"));
+
+        if (product.getQuantity() < orderItemDTO.getQuantity()) {
+            throw new InsufficientStockException("Insufficient stock for product " + product.getName());
+        }
+
+        OrderItem orderItem = new OrderItem();
+        orderItem.setOrder(order);
+        orderItem.setProduct(product);
+        orderItem.setQuantity(orderItemDTO.getQuantity());
+
+        order.getOrderItems().add(orderItem);
+        orderItemRepository.save(orderItem);
+
+        product.setQuantity(product.getQuantity() - orderItemDTO.getQuantity());
+        productRepository.save(product);
+
+        return orderItem;
+    }
+
+    @Override
+    @Transactional
+    public boolean removeItemFromOrder(int orderId, int itemId) {
+        Order order = orderRepository.findById(orderId).orElse(null);
+        if (order == null) return false;
+
+        OrderItem orderItem = order.getOrderItems().stream()
+                .filter(item -> item.getId() == itemId)
+                .findFirst()
+                .orElse(null);
+        if (orderItem == null) return false;
+
+        order.getOrderItems().remove(orderItem);
+        orderItemRepository.delete(orderItem);
+
+        return true;
+    }
 }
+
+
