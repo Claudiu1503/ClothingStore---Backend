@@ -5,6 +5,7 @@ import com.backend.clothingstore.model.Review;
 import com.backend.clothingstore.model.User;
 import com.backend.clothingstore.repositories.ProductRepository;
 import com.backend.clothingstore.repositories.ReviewRepository;
+import com.backend.clothingstore.repositories.UserRepository;
 import com.backend.clothingstore.services.ReviewService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,6 +21,8 @@ public class ReviewServiceImpl implements ReviewService {
 
     @Autowired
     private ProductRepository productRepository;
+    @Autowired
+    private UserRepository userRepository;
 
     public Review addReview(User user,Long productId, String content, int rating) {
 
@@ -41,5 +44,10 @@ public class ReviewServiceImpl implements ReviewService {
     @Override
     public List<Review> getReviewsForProduct(Long productId) {
         return reviewRepository.findByProductId(productId);
+    }
+
+    @Override
+    public void deleteReview(Long id) {
+        reviewRepository.deleteById(id);
     }
 }

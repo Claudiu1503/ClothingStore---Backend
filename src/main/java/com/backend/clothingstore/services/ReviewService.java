@@ -10,4 +10,6 @@ public interface ReviewService {
     public Review addReview(User user, Long productId, String content, int rating);
 
     List<Review> getReviewsForProduct(Long productId);
+
+    void deleteReview(Long id);
 }
