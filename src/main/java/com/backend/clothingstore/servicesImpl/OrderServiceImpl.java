@@ -2,6 +2,7 @@ package com.backend.clothingstore.servicesImpl;
 
 import com.backend.clothingstore.DTO.OrderDTO;
 import com.backend.clothingstore.DTO.OrderItemDTO;
+import com.backend.clothingstore.email.EmailSender;
 import com.backend.clothingstore.errorHeandler.InsufficientStockException;
 import com.backend.clothingstore.model.Order;
 import com.backend.clothingstore.model.OrderItem;
@@ -29,6 +30,8 @@ public class OrderServiceImpl implements OrderService {
     private OrderItemRepository orderItemRepository;
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    EmailSender emailSender;
 
     @Override
     @Transactional
@@ -64,6 +67,10 @@ public class OrderServiceImpl implements OrderService {
         order.setTotal(total);
         order.setOrderItems(orderItems);
         orderRepository.save(order);
+
+
+        emailSender.sendConfirmOrder(user.getEmail(), buildConfirmOrderEmail(user.getUsername(),order));
+
 
         return order;
     }
@@ -168,6 +175,50 @@ public class OrderServiceImpl implements OrderService {
 
         return true;
     }
+
+
+
+    private String buildConfirmOrderEmail(String name, Order order) {
+        StringBuilder itemsList = new StringBuilder();
+        for (OrderItem item : order.getOrderItems()) {
+            itemsList.append("<tr>")
+                    .append("<td>").append(item.getProduct().getName()).append("</td>")
+                    .append("<td>").append(item.getQuantity()).append("</td>")
+                    .append("<td>").append(String.format("%.2f", item.getProduct().getPrice())).append(" USD</td>")
+                    .append("<td>").append(String.format("%.2f", item.getQuantity() * item.getProduct().getPrice())).append(" USD</td>")
+                    .append("</tr>");
+        }
+
+        User user = order.getUser(); // Assuming order has a reference to User
+
+        String address = String.format("%s, %s, %s, %s, %s, %s",
+                user.getAddressLine(),
+                user.getCity(),
+                user.getState(),
+                user.getZip(),
+                user.getCountry(),
+                user.getPhone());
+
+        return "<div style=\"font-family:Helvetica,Arial,sans-serif;font-size:16px;margin:0;color:#0b0c0c\">\n" +
+                "<table role=\"presentation\" width=\"100%\" style=\"border-collapse:collapse;max-width:580px;margin:0 auto;padding:10px\">\n" +
+                "<tr><td><h2>Thank you for your order, " + name + "!</h2></td></tr>\n" +
+                "<tr><td>Here are the details of your order:</td></tr>\n" +
+                "<tr><td style=\"padding-top:20px;\"><strong>Shipping Address:</strong><br>" + address + "</td></tr>\n" +
+                "<tr><td><table style=\"width:100%;border:1px solid #ddd;border-collapse:collapse;\">\n" +
+                "<tr style=\"background-color:#f2f2f2\">\n" +
+                "<th style=\"padding:8px;border:1px solid #ddd;\">Product</th>\n" +
+                "<th style=\"padding:8px;border:1px solid #ddd;\">Quantity</th>\n" +
+                "<th style=\"padding:8px;border:1px solid #ddd;\">Price per Unit</th>\n" +
+                "<th style=\"padding:8px;border:1px solid #ddd;\">Subtotal</th>\n" +
+                "</tr>" + itemsList.toString() + "\n" +
+                "</table></td></tr>\n" +
+                "<tr><td style=\"padding-top:20px;font-size:18px;\"><strong>Total: " +
+                String.format("%.2f", order.getTotal()) + " USD</strong></td></tr>\n" +
+                "<tr><td style=\"padding-top:20px;\">We hope you enjoy your purchase. Thank you for shopping with us!</td></tr>\n" +
+                "</table>\n" +
+                "</div>";
+    }
+
 
 
 }
