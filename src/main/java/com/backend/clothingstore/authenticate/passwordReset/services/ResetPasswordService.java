@@ -54,7 +54,7 @@ public class ResetPasswordService {
         ResetPasswordToken resetPasswordToken = new ResetPasswordToken(
                 code,
                 LocalDateTime.now(),
-                LocalDateTime.now().plusDays(6),
+                LocalDateTime.now().plusMinutes(5),
                 null,
                 user
         );
@@ -126,7 +126,7 @@ public class ResetPasswordService {
                 "        <p style=\"Margin:0 0 20px 0;font-size:19px;line-height:25px;color:#0b0c0c\">Hi " + name + ",</p>" +
                 "        <p style=\"Margin:0 0 20px 0;font-size:19px;line-height:25px;color:#0b0c0c\">We received a request to reset your password. Use the code below to complete the reset:</p>" +
                 "        <p style=\"Margin:0 0 20px 0;font-size:24px;line-height:25px;color:#1D70B8;font-weight:bold;text-align:center\">" + code + "</p>" +
-                "       <p style=\"Margin:0 0 20px 0;font-size:19px;line-height:25px;color:#ff1500\">Code will expire in 6 hours!</p>" +
+                "       <p style=\"Margin:0 0 20px 0;font-size:19px;line-height:25px;color:#ff1500\">Code will expire in 5 minutes!</p>" +
                 "        <p style=\"Margin:0 0 20px 0;font-size:19px;line-height:25px;color:#0b0c0c\">If you did not request a password reset, please ignore this email.</p>" +
                 "      </td>\n" +
                 "    </tr>\n" +
