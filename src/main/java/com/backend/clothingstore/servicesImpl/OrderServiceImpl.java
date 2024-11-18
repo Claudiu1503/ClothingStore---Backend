@@ -14,11 +14,25 @@ import com.backend.clothingstore.repositories.ProductRepository;
 import com.backend.clothingstore.repositories.UserRepository;
 import com.backend.clothingstore.services.OrderService;
 import jakarta.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.io.ByteArrayOutputStream;
+
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+
+import org.apache.pdfbox.pdmodel.PDDocument;
+import org.apache.pdfbox.pdmodel.PDPage;
+import org.apache.pdfbox.pdmodel.PDPageContentStream;
+import org.apache.pdfbox.pdmodel.font.PDType1Font;
+
+
+import java.awt.Color;
+
+
 
 @Service
 public class OrderServiceImpl implements OrderService {
@@ -41,7 +55,6 @@ public class OrderServiceImpl implements OrderService {
 
         Order order = new Order();
         order.setUser(user);
-
 
         List<OrderItem> orderItems = new ArrayList<>();
         double total = 0;
@@ -68,12 +81,17 @@ public class OrderServiceImpl implements OrderService {
         order.setOrderItems(orderItems);
         orderRepository.save(order);
 
-
-        emailSender.sendConfirmOrder(user.getEmail(), buildConfirmOrderEmail(user.getUsername(),order));
-
+        // Generate PDF and send email
+        try {
+            byte[] pdfInvoice = generateInvoicePDF(order);
+            emailSender.sendConfirmOrder(user.getEmail(), buildConfirmOrderEmail(user.getUsername(), order), pdfInvoice);
+        } catch (IOException e) {
+            throw new RuntimeException("Failed to generate invoice PDF", e);
+        }
 
         return order;
     }
+
 
     @Override
     public Order getOrderById(int id) {
@@ -177,7 +195,102 @@ public class OrderServiceImpl implements OrderService {
     }
 
 
+    public byte[] generateInvoicePDF(Order order) throws IOException {
+        try (PDDocument document = new PDDocument()) {
+            PDPage page = new PDPage();
+            document.addPage(page);
 
+            PDPageContentStream contentStream = new PDPageContentStream(document, page);
+
+            try {
+                // Background color
+                contentStream.setNonStrokingColor(new Color(230, 240, 255));
+                contentStream.addRect(0, 0, page.getMediaBox().getWidth(), page.getMediaBox().getHeight());
+                contentStream.fill();
+
+                // Title
+                contentStream.setFont(PDType1Font.HELVETICA_BOLD, 24);
+                contentStream.setNonStrokingColor(Color.DARK_GRAY);
+                contentStream.beginText();
+                contentStream.newLineAtOffset(50, 750);
+                contentStream.showText("Invoice");
+                contentStream.endText();
+
+                // Order Details
+                contentStream.setFont(PDType1Font.HELVETICA, 12);
+                contentStream.setNonStrokingColor(Color.BLACK);
+                contentStream.beginText();
+                contentStream.newLineAtOffset(50, 700);
+                contentStream.showText("Order ID: " + order.getId());
+                contentStream.newLineAtOffset(0, -15);
+                contentStream.showText("User: " + order.getUser().getUsername());
+                contentStream.newLineAtOffset(0, -15);
+                contentStream.showText("Total: " + String.format("%.2f", order.getTotal()) + " USD");
+                contentStream.endText();
+
+                // Message
+                contentStream.setFont(PDType1Font.HELVETICA_OBLIQUE, 14);
+                contentStream.beginText();
+                contentStream.newLineAtOffset(50, 650);
+                contentStream.setNonStrokingColor(Color.GRAY);
+                contentStream.showText("Thank you for your order! We hope you enjoy your products!");
+                contentStream.endText();
+
+                // Table Header
+                contentStream.setFont(PDType1Font.HELVETICA_BOLD, 12);
+                contentStream.setNonStrokingColor(Color.WHITE);
+                contentStream.setStrokingColor(Color.BLUE);
+                contentStream.addRect(50, 600, 500, 20);
+                contentStream.fill();
+                contentStream.stroke();
+                contentStream.beginText();
+                contentStream.setNonStrokingColor(Color.WHITE);
+                contentStream.newLineAtOffset(55, 605);
+                contentStream.showText("Product Name          Quantity          Subtotal (USD)");
+                contentStream.endText();
+
+                // Table Rows
+                contentStream.setFont(PDType1Font.HELVETICA, 12);
+                contentStream.setNonStrokingColor(Color.BLACK);
+                int y = 580;
+                for (OrderItem item : order.getOrderItems()) {
+                    if (y < 100) { // Add a new page if the content overflows
+                        contentStream.close();
+                        page = new PDPage();
+                        document.addPage(page);
+                        contentStream = new PDPageContentStream(document, page);
+
+                        // Redraw header on new page
+                        contentStream.setFont(PDType1Font.HELVETICA_BOLD, 12);
+                        contentStream.setNonStrokingColor(Color.WHITE);
+                        contentStream.setStrokingColor(Color.BLUE);
+                        contentStream.addRect(50, 750, 500, 20);
+                        contentStream.fill();
+                        contentStream.stroke();
+                        contentStream.beginText();
+                        contentStream.setNonStrokingColor(Color.WHITE);
+                        contentStream.newLineAtOffset(55, 755);
+                        contentStream.showText("Product Name          Quantity          Subtotal (USD)");
+                        contentStream.endText();
+                        y = 730;
+                    }
+                    contentStream.beginText();
+                    contentStream.newLineAtOffset(55, y);
+                    contentStream.showText(item.getProduct().getName() + "          " +
+                            item.getQuantity() + "          " +
+                            String.format("%.2f", item.getProduct().getPrice() * item.getQuantity()));
+                    contentStream.endText();
+                    y -= 20;
+                }
+            } finally {
+                contentStream.close();
+            }
+
+            ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+            document.save(outputStream);
+            return outputStream.toByteArray();
+        }
+    }
     private String buildConfirmOrderEmail(String name, Order order) {
         StringBuilder itemsList = new StringBuilder();
         for (OrderItem item : order.getOrderItems()) {

@@ -2,6 +2,7 @@ package com.backend.clothingstore.email;
 
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
+import jakarta.mail.util.ByteArrayDataSource;
 import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -57,20 +58,25 @@ public class EmailService implements EmailSender{
 
     @Override
     @Async
-    public void sendConfirmOrder(String to, String email){
+    public void sendConfirmOrder(String to, String email, byte[] pdfInvoice) {
         try {
             MimeMessage message = mailSender.createMimeMessage();
-            MimeMessageHelper helper = new MimeMessageHelper(message, "utf-8");
+            MimeMessageHelper helper = new MimeMessageHelper(message, true, "utf-8");
             helper.setText(email, true);
             helper.setTo(to);
             helper.setSubject("Confirm your order");
             helper.setFrom("fashonclothingstore@gmail.com");
+
+            // Attach the PDF
+            helper.addAttachment("Invoice.pdf", new ByteArrayDataSource(pdfInvoice, "application/pdf"));
+
             mailSender.send(message);
-        }catch (MessagingException e) {
-            LOGGER.error("fail to send email", e);
-            throw new IllegalStateException("fail to send email");
+        } catch (MessagingException e) {
+            LOGGER.error("Failed to send email", e);
+            throw new IllegalStateException("Failed to send email");
         }
     }
+
 
 
 }
