@@ -26,7 +26,7 @@ public class FavoritesServiceImpl implements FavoritesService {
     @Override
     public void add(Product product, User user) {
         Favorites favFind = favoritesRepository.findByUserIdAndProductId(user.getId(), product.getId());
-        if (favFind != null) {
+        if (favFind == null) {
             Favorites fav = new Favorites();
             fav.setProduct(product);
             fav.setUser(user);
@@ -39,7 +39,11 @@ public class FavoritesServiceImpl implements FavoritesService {
     @Override
     public void deleteOneProductFromFav(Product product, User user) {
         Favorites fav = favoritesRepository.findByUserIdAndProductId(user.getId(), product.getId());
-        favoritesRepository.delete(fav);
+        if (fav != null) {
+            favoritesRepository.delete(fav);
+        } else {
+            throw new IllegalArgumentException("Favorite not found");
+        }
     }
 
     @Override
