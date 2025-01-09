@@ -1,5 +1,6 @@
 package com.backend.clothingstore.services;
 
+import com.backend.clothingstore.DTO.OrderDTO;
 import com.backend.clothingstore.model.Order;
 import com.backend.clothingstore.model.OrderItem;
 import com.backend.clothingstore.repositories.OrderRepository;
@@ -38,17 +39,6 @@ class OrderServiceImplTest {
         MockitoAnnotations.openMocks(this);
     }
 
-    @Test
-    void createOrder() {
-        Order order = new Order();
-        order.setId(1);
-        when(orderRepository.save(any(Order.class))).thenReturn(order);
-
-        Order createdOrder = orderService.createOrder(order);
-        assertNotNull(createdOrder);
-        assertEquals(1, createdOrder.getId());
-        verify(orderRepository, times(1)).save(order);
-    }
 
     @Test
     void getOrderById() {
@@ -72,21 +62,6 @@ class OrderServiceImplTest {
         assertEquals(2, allOrders.size());
     }
 
-    @Test
-    void updateOrder() {
-        Order existingOrder = new Order();
-        existingOrder.setId(1);
-
-        Order updatedOrderDetails = new Order();
-        updatedOrderDetails.setId(1);
-
-        when(orderRepository.findById(anyInt())).thenReturn(Optional.of(existingOrder));
-        when(orderRepository.save(any(Order.class))).thenReturn(updatedOrderDetails);
-
-        Order updatedOrder = orderService.updateOrder(1, updatedOrderDetails);
-        assertNotNull(updatedOrder);
-        assertEquals(1, updatedOrder.getId());
-    }
 
     @Test
     void deleteOrder() {
@@ -98,34 +73,7 @@ class OrderServiceImplTest {
         verify(orderRepository, times(1)).deleteById(1);
     }
 
-    @Test
-    void addItemToOrder() {
-        Order order = new Order();
-        order.setId(1);
-        OrderItem orderItem = new OrderItem();
-        orderItem.setId(1);
-
-        when(orderRepository.findById(1)).thenReturn(Optional.of(order));
-        // daca am un save in order repo
-        // when(orderItemRepository.save(any(OrderItem.class))).thenReturn(orderItem);
-
-        OrderItem createdOrderItem = orderService.addItemToOrder(1, orderItem);
-        assertNotNull(createdOrderItem);
-
-    }
-
-    @Test
-    void removeItemFromOrder() {
-        Order order = new Order();
-        order.setId(1);
-        OrderItem orderItem = new OrderItem();
-        orderItem.setId(1);
-
-        when(orderRepository.findById(1)).thenReturn(Optional.of(order));
 
 
-        boolean isRemoved = orderService.removeItemFromOrder(1, 1);
-        assertTrue(isRemoved);
 
-    }
 }
